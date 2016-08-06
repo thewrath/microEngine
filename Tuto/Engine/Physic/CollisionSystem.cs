@@ -6,7 +6,7 @@ namespace Engine.Physic
 {
 	public class CollisionSystem
 	{
-		List<GameObject> gameObjects;
+		public List<GameObject> gameObjects;
 
 		public CollisionSystem()
 		{

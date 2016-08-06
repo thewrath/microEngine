@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Input;
 using Engine.Core.Game;
+using Engine.Core.Game.Map;
 using Engine.Effect.Particle;
 using Engine.Physic;
 
@@ -30,6 +31,11 @@ namespace Tuto
 		GameObject rect2;
 		GameObject rect3;
 
+		//la map
+		List<Texture2D> gameMapTiles;
+		int[,] tileMap;
+		Map gameMap;
+
 		List<GameObject> fireWorks;
 		Texture2D fireWorkTexture;
 		//random
@@ -38,8 +44,8 @@ namespace Tuto
 		public Game1()
 		{
 			graphics = new GraphicsDeviceManager (this);
-			//graphics.PreferredBackBufferWidth = 1920;
-			//graphics.PreferredBackBufferHeight = 1080;
+			graphics.PreferredBackBufferWidth = 640;
+			graphics.PreferredBackBufferHeight = 480;
 			//graphics.IsFullScreen = true;
 			graphics.ApplyChanges();
 			Content.RootDirectory = "Content";
@@ -58,10 +64,27 @@ namespace Tuto
 				rects.Add(rect);
 			}
 
+			tileMap = new int[15, 20] { { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+										{ 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},};
+
 
 			rect2 = new GameObject(new Vector2(0, 0), new Vector2(32, 32));
 			rect3 = new GameObject(new Vector2(300, 150), new Vector2(32, 32));
-			fireWorks = new List<GameObject>();	
+			fireWorks = new List<GameObject>();
+			gameMapTiles = new List<Texture2D>();
 			this.random = new Random();
 			base.Initialize ();
 		}
@@ -82,6 +105,9 @@ namespace Tuto
 			particleTexture2 = Content.Load<Texture2D>("particle2");
 			particleTexture3 = Content.Load<Texture2D>("particle3");
 			fireWorkTexture = Content.Load<Texture2D>("fire");
+			gameMapTiles.Add(Content.Load<Texture2D>("tile"));
+			gameMapTiles.Add(Content.Load<Texture2D>("tile2"));
+			gameMap = new Map(gameMapTiles, 1, tileMap, 32);
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 		}
@@ -90,7 +116,8 @@ namespace Tuto
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
-
+			//update de la map 
+			gameMap.updateMap();
 			KeyboardState prevKbState = kbState;
 			kbState = Keyboard.GetState();
 
@@ -156,7 +183,7 @@ namespace Tuto
 			for (int i = 0; i < this.fireWorks.Count; i++)
 			{
 				fireWorks[i].position.Y -= 5;
-				if (fireWorks[i].position.Y < fireWorks[i].origin.Y - 300 || collisionSystem.checkCollisionRect(fireWorks[i]))
+				if (fireWorks[i].position.Y < fireWorks[i].origin.Y - 300 || collisionSystem.checkCollisionRect(fireWorks[i]) || gameMap.checkCollisionWiththeMap(fireWorks[i]))
 				{
 					heroParticle.generateParticle(particleTexture2, new Vector2(fireWorks[i].position.X, fireWorks[i].position.Y), 100, 50, ParticleType.EXPLODE, 1, true);
 					fireWorks.Remove(this.fireWorks[i]);
@@ -173,6 +200,7 @@ namespace Tuto
 		{
 			graphics.GraphicsDevice.Clear (Color.CornflowerBlue);
 			spriteBatch.Begin();
+			gameMap.drawMap(spriteBatch);
 			hero.drawAnimation(spriteBatch);
 			foreach (var i in rects)
 			{
