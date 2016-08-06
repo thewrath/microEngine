@@ -15,6 +15,7 @@ namespace Engine.Core.Game
     {
 
         public Vector2 position;
+		public Vector2 origin;
 		public Vector2 size;
 		public Color color;
 		public Texture2D texture;
@@ -28,6 +29,7 @@ namespace Engine.Core.Game
         {
             this.animations = new List<SpriteAnimation>();
             this.position = position;
+			this.origin = position;
 			this.size = size;
 			this.color = Color.White;
 			this.canMove = true;
