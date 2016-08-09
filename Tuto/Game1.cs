@@ -143,8 +143,8 @@ namespace Tuto
 			}
 			else 
 			{
-				heroParticle.generateParticle(particleTexture2, new Vector2(mouseState.X, mouseState.Y), 10, 2, ParticleType.EXPLODE, 1, true);
-				heroParticle.generateParticle(particleTexture3, new Vector2(mouseState.X, mouseState.Y), 200, 2, ParticleType.FALL, 3, true);
+				//heroParticle.generateParticle(particleTexture2, new Vector2(mouseState.X, mouseState.Y), 10, 2, ParticleType.EXPLODE, 1, true);
+				//heroParticle.generateParticle(particleTexture3, new Vector2(mouseState.X, mouseState.Y), 200, 2, ParticleType.FALL, 3, true);
 			}
 
 			rect2.setPosition(new Vector2(mouseState.X, mouseState.Y));

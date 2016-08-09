@@ -20,7 +20,7 @@ namespace Engine.Core.Game.Map
 			this.tileMap = tileMap;
 			this.tileSize = tileSize;
 			this.mapCollisionSystem = new CollisionSystem();
-			Console.Write(tiles.Count);
+
 		}
 
 

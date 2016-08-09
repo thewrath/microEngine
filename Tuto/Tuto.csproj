@@ -48,9 +48,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Game1.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Engine\Animation\FrameAnimation.cs" />
     <Compile Include="Engine\Animation\SpriteAnimation.cs" />
     <Compile Include="Engine\Animation\SpriteManager.cs" />
@@ -68,6 +65,9 @@
     <Compile Include="Engine\Physic\CollisionSystem.cs" />
     <Compile Include="Engine\Physic\GravitySystem.cs" />
     <Compile Include="Engine\Core\Game\Map\Map.cs" />
+    <Compile Include="Game1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />
