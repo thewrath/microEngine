@@ -143,21 +143,33 @@ namespace Tuto
 			}
 			else 
 			{
-				//heroParticle.generateParticle(particleTexture2, new Vector2(mouseState.X, mouseState.Y), 10, 2, ParticleType.EXPLODE, 1, true);
-				//heroParticle.generateParticle(particleTexture3, new Vector2(mouseState.X, mouseState.Y), 200, 2, ParticleType.FALL, 3, true);
+				heroParticle.generateParticle(particleTexture2, new Vector2(mouseState.X, mouseState.Y), 10, 2, ParticleType.EXPLODE, 1, true);
+				heroParticle.generateParticle(particleTexture3, new Vector2(mouseState.X, mouseState.Y), 200, 2, ParticleType.FALL, 3, true);
 			}
 
 			rect2.setPosition(new Vector2(mouseState.X, mouseState.Y));
 
 			heroParticle.generateParticle(particleTexture2, new Vector2(hero.position.X+10, hero.position.Y+88), 20, 2, ParticleType.FOLLOW,1,false,1);
+
+			//test
+			hero.move(kbState, 1f);
+
+
 			if (collisionSystem.checkCollisionRect(hero) != true)
 			{
+
 				hero.update(gameTime, true);
+
 			}
 			else
 			{
 				hero.update(gameTime, false);
+				hero.jump(kbState);
 			}
+
+
+			hero.updateJump();
+
 
 			if (collisionSystem.checkCollisionRect(rect2))
 			{
